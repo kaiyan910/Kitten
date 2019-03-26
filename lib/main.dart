@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kitten/src/module/main/main_page.dart';
+import 'package:kitten/src/module/main/ui/main_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MainPage()
+      home: MainScreen()
     );
   }
 }
