@@ -15,7 +15,9 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
         body: Center(
           child: Column(
-            children: <Widget>[Text('CENTER')],
+            children: <Widget>[
+              Text('CENTER')
+            ],
           ),
         ),
         bottomNavigationBar: BottomNavigationBar(
@@ -32,6 +34,7 @@ class _MainPageState extends State<MainPage> {
 
             setState((){ _selectedIndex = index; });
           },
-        ));
+        )
+    );
   }
 }
