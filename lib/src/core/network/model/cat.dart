@@ -1,4 +1,4 @@
-class Image {
+class Cat {
 
   String id;
   String url;
@@ -6,9 +6,9 @@ class Image {
   List<Category> category;
   List<Breed> breed;
 
-  Image.from(Map<String, dynamic> json)
+  Cat.from(Map<String, dynamic> json)
     : id = json["id"],
-      url = json["name"],
+      url = json["url"],
       category = (json["categories"] as List)
           ?.map((e) => e == null
           ? null
