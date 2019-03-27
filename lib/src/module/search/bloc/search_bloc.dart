@@ -10,9 +10,9 @@ class SearchBloc {
 
   Observable<List<Cat>> get searchResult => _searchResult.stream;
 
-
   SearchBloc() {
 
+    print("[DEBUG] SearchBloc costructor");
     search();
   }
 

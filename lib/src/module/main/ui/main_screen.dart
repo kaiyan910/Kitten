@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:kitten/src/module/main/bloc/main_bloc.dart';
-import 'package:kitten/src/module/search/bloc/search_bloc_provider.dart';
 import 'package:kitten/src/module/search/ui/search_list_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -10,18 +9,25 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final MainBloc bloc = MainBloc();
+  final _bloc = MainBloc();
 
   @override
   Widget build(BuildContext context) {
+    print('[DEBUG] build MainScreen');
     return StreamBuilder<int>(
-        stream: bloc.selectedIndex,
+        stream: _bloc.selectedIndex,
         initialData: 0,
         builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
           return Scaffold(
-            body: SearchBlocProvider(
-                child: SearchListScreen()
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+              brightness: Brightness.light,
+              title: Text(
+                '喵喵',
+                style: TextStyle(color: Colors.blue),
+              ),
             ),
+            body: SearchListScreen(),
             bottomNavigationBar: BottomNavigationBar(
               items: [
                 BottomNavigationBarItem(
@@ -32,7 +38,7 @@ class _MainScreenState extends State<MainScreen> {
                     icon: Icon(Icons.settings), title: Text('設定')),
               ],
               currentIndex: snapshot.data,
-              onTap: (index) => bloc.updateSelectedIndex(index),
+              onTap: (index) => _bloc.updateSelectedIndex(index),
             ),
           );
         });
@@ -40,8 +46,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   void dispose() {
+    _bloc.dispose();
     super.dispose();
-
-    bloc.dispose();
   }
 }

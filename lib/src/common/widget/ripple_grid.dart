@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class RippleGrid extends StatelessWidget {
-
   final Function onTap;
   final double size;
   final String url;
@@ -9,18 +8,22 @@ class RippleGrid extends StatelessWidget {
   RippleGrid(this.onTap, this.size, this.url);
 
   @override
-  Widget build(BuildContext context) => Stack(
-    children: <Widget>[
-      FadeInImage.assetNetwork(
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        FadeInImage.assetNetwork(
           placeholder: 'assets/images/placeholder.png',
           image: url,
           fit: BoxFit.cover,
-          height: size),
-      Material(
-          color: Colors.transparent,
-          child: new InkWell(
-            onTap: onTap,
-          )),
-    ],
-  );
+          height: size,
+          width: size,
+        ),
+        Material(
+            color: Colors.transparent,
+            child: new InkWell(
+              onTap: onTap,
+            )),
+      ],
+    );
+  }
 }
