@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
 
-import 'package:kitten/src/module/search/ui/search_details_screen.dart';
+import 'package:kitten/src/module/image/ui/image_screen.dart';
 import 'package:kitten/src/module/search/bloc/search_bloc.dart';
 import 'package:kitten/src/common/widget/ripple_grid.dart';
 
@@ -20,6 +20,7 @@ class _SearchScreenState extends State<SearchScreen> {
     print('[DEBUG] build SearchScreen');
 
     return RefreshIndicator(
+
       child: StreamBuilder<SearchScreenState>(
         stream: _bloc.searchResult,
         initialData: SearchScreenState.initial(),
@@ -43,7 +44,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => SearchDetailsScreen(snapshot.data.results[index]),
+                    builder: (context) => ImageScreen(snapshot.data.results[index]),
                   ),
                 );
 

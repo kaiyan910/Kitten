@@ -15,9 +15,10 @@ class MainBloc {
         .pipe(_bottomNavIndex);
   }
 
-  dispose() {
+  dispose() async {
 
     _bottomNavIndexFetcher.close();
+    await _bottomNavIndex.drain();
     _bottomNavIndex.close();
   }
 }

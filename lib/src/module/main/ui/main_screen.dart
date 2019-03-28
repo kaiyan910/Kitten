@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:kitten/generated/i18n.dart';
 
 import 'package:kitten/src/module/favourite/ui/favourite_screen.dart';
 import 'package:kitten/src/module/main/bloc/main_bloc.dart';
@@ -28,7 +29,7 @@ class _MainScreenState extends State<MainScreen> {
             brightness: Brightness.light,
             centerTitle: true,
             title: Text(
-              '喵喵',
+              S.of(context).app_name,
               style: TextStyle(
                 color: Colors.blue,
               ),
@@ -38,11 +39,12 @@ class _MainScreenState extends State<MainScreen> {
           bottomNavigationBar: BottomNavigationBar(
             items: [
               BottomNavigationBarItem(
-                  icon: Icon(Icons.add_a_photo), title: Text('圖片')),
+                  icon: Icon(Icons.add_a_photo), title: Text(S.of(context).main_bs_gallery)),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.favorite), title: Text('最愛')),
+                  icon: Icon(Icons.favorite), title: Text(S.of(context).main_bs_favourite)),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.settings), title: Text('設定')),
+                  icon: Icon(Icons.settings), title: Text(Localizations.localeOf(context).toString()),
+              ),
             ],
             currentIndex: snapshot.data,
             onTap: (index) => _bloc.updateSelectedIndex(index),

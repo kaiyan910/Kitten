@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kitten/src/core/model/cat.dart';
-import 'package:kitten/src/module/search/bloc/search_details_bloc.dart';
+import 'package:kitten/src/module/image/bloc/image_bloc.dart';
 import 'package:photo_view/photo_view.dart';
 
-class SearchDetailsScreen extends StatefulWidget {
+class ImageScreen extends StatefulWidget {
 
   final Cat cat;
 
-  SearchDetailsScreen(this.cat,
+  ImageScreen(this.cat,
       {Key key})
       : super(key: key);
 
   @override
-  _SearchDetailsScreenState createState() => _SearchDetailsScreenState();
+  _ImageScreenState createState() => _ImageScreenState();
 }
 
-class _SearchDetailsScreenState extends State<SearchDetailsScreen> {
+class _ImageScreenState extends State<ImageScreen> {
 
-  final _bloc = SearchDetailsBloc();
+  final _bloc = ImageBloc();
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,7 @@ class _SearchDetailsScreenState extends State<SearchDetailsScreen> {
   Widget _buildPhotoView() => PhotoView(
     imageProvider: NetworkImage(widget.cat.url),
     minScale: 0.5,
-    heroTag: widget.cat.id,
+    heroTag: widget.cat.url,
   );
 
   Widget _buildAppBar() => Positioned(

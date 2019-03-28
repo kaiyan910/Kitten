@@ -3,7 +3,7 @@ import 'package:kitten/src/core/database/local_repository.dart';
 import 'package:kitten/src/core/model/cat.dart';
 import 'package:rxdart/rxdart.dart';
 
-class SearchDetailsBloc {
+class ImageBloc {
   final _localRepository = localRepository;
 
   final _favouriteFetcher = PublishSubject<bool>();
@@ -13,7 +13,7 @@ class SearchDetailsBloc {
 
   Function(bool) get updateFavourite => _favouriteFetcher.sink.add;
 
-  SearchDetailsBloc() {
+  ImageBloc() {
     _favouriteFetcher.stream.pipe(_favourite);
   }
 
@@ -37,8 +37,9 @@ class SearchDetailsBloc {
     _favouriteFetcher.sink.add(favourite);
   }
 
-  dispose() {
+  dispose() async {
     _favouriteFetcher.close();
+    await _favourite.drain();
     _favourite.close();
   }
 }
