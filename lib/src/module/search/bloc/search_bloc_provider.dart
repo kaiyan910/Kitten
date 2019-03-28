@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kitten/src/module/main/bloc/main_bloc.dart';
 import 'package:kitten/src/module/search/bloc/search_bloc.dart';
 
 class SearchBlocProvider extends InheritedWidget {

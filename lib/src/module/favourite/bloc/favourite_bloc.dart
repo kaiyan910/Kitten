@@ -1,4 +1,4 @@
-import 'package:kitten/src/core/network/model/cat.dart';
+import 'package:kitten/src/core/model/cat.dart';
 import 'package:rxdart/rxdart.dart';
 
 class FavouriteBloc {

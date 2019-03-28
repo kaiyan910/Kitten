@@ -9,21 +9,25 @@ class RippleGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        FadeInImage.assetNetwork(
-          placeholder: 'assets/images/placeholder.png',
-          image: url,
-          fit: BoxFit.cover,
-          height: size,
-          width: size,
-        ),
-        Material(
-            color: Colors.transparent,
-            child: new InkWell(
-              onTap: onTap,
-            )),
-      ],
+    return Hero(
+      tag: url,
+      child: Stack(
+        children: <Widget>[
+          FadeInImage.assetNetwork(
+            placeholder: 'assets/images/placeholder.png',
+            image: url,
+            fit: BoxFit.cover,
+            height: size,
+            width: size,
+          ),
+          Material(
+              color: Colors.transparent,
+              child: new InkWell(
+                splashColor: Colors.white30,
+                onTap: onTap,
+              )),
+        ],
+      ),
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:http/http.dart' as http;
 
-class RemoteClient extends http.BaseClient {
+class ApiClient extends http.BaseClient {
 
   final client = http.Client();
 
@@ -11,3 +11,5 @@ class RemoteClient extends http.BaseClient {
     return client.send(request);
   }
 }
+
+final apiClient = ApiClient();

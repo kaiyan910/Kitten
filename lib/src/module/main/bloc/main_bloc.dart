@@ -1,5 +1,3 @@
-import 'package:kitten/src/core/network/remote_provider.dart';
-import 'package:kitten/src/core/network/model/cat.dart';
 import 'package:rxdart/rxdart.dart';
 
 class MainBloc {
