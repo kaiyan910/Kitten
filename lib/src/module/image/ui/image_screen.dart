@@ -46,6 +46,7 @@ class _ImageScreenState extends State<ImageScreen> {
 
   Widget _buildPhotoView() => PhotoView(
     imageProvider: NetworkImage(widget.cat.url),
+    initialScale: 1.0,
     minScale: 0.5,
     heroTag: widget.cat.url,
   );
@@ -72,7 +73,7 @@ class _ImageScreenState extends State<ImageScreen> {
         ),
         IconButton(
           icon: Icon(Icons.file_download),
-          onPressed: () {},
+          onPressed: () => _bloc.download(widget.cat.url),
         ),
       ],
     ),

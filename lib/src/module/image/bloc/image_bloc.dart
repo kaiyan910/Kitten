@@ -2,6 +2,7 @@ import 'package:kitten/src/core/database/database_provider.dart';
 import 'package:kitten/src/core/database/local_repository.dart';
 import 'package:kitten/src/core/model/cat.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:image_downloader/image_downloader.dart';
 
 class ImageBloc {
   final _localRepository = localRepository;
@@ -17,13 +18,20 @@ class ImageBloc {
     _favouriteFetcher.stream.pipe(_favourite);
   }
 
+  download(String url) async {
+    try {
+      await ImageDownloader.downloadImage(url);
+    } on Exception catch (error) {
+      print(error);
+    }
+  }
+
   checkFavourite(String id) async {
     final result = await _localRepository.hasFavourite(id);
     _favouriteFetcher.sink.add(result);
   }
 
   changeFavouriteStatus(Cat cat, bool favourite) async {
-
     int res = -1;
 
     if (favourite) {

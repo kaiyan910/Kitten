@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
+import 'package:kitten/src/common/widget/platform_indicator.dart';
 
 import 'package:kitten/src/module/image/ui/image_screen.dart';
 import 'package:kitten/src/module/search/bloc/search_bloc.dart';
@@ -28,8 +29,13 @@ class _SearchScreenState extends State<SearchScreen> {
             (BuildContext context, AsyncSnapshot<SearchScreenState> snapshot) {
 
           if (!snapshot.data.init) {
-            return Center(
-              child: CircularProgressIndicator(),
+            return PlatformIndicator(
+              android: Center(
+                child: CircularProgressIndicator(),
+              ),
+              ios: Center(
+                child: CupertinoActivityIndicator(animating: true),
+              ),
             );
           }
 

@@ -1,13 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
 import 'package:kitten/src/common/mixins/status_bar_handler.dart';
 import 'package:kitten/src/core/model/cat.dart';
-import 'package:kitten/src/core/network/api_provider.dart';
 import 'package:kitten/src/core/network/remote_repository.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SearchBloc with StatusBarHandler {
-
   final _remoteProvider = remoteRepository;
   final _searchResult = BehaviorSubject<SearchScreenState>();
 
