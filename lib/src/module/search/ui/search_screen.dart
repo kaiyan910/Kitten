@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
 import 'package:kitten/src/common/widget/platform_indicator.dart';
+import 'package:kitten/src/common/widget/platform_loading.dart';
 
 import 'package:kitten/src/module/image/ui/image_screen.dart';
 import 'package:kitten/src/module/search/bloc/search_bloc.dart';
@@ -29,14 +30,7 @@ class _SearchScreenState extends State<SearchScreen> {
             (BuildContext context, AsyncSnapshot<SearchScreenState> snapshot) {
 
           if (!snapshot.data.init) {
-            return PlatformIndicator(
-              android: Center(
-                child: CircularProgressIndicator(),
-              ),
-              ios: Center(
-                child: CupertinoActivityIndicator(animating: true),
-              ),
-            );
+            return PlatformLoading();
           }
 
           return GridView.count(
@@ -50,7 +44,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ImageScreen(snapshot.data.results[index]),
+                    builder: (context) => Scaffold(body: ImageScreen(snapshot.data.results[index])),
                   ),
                 );
 

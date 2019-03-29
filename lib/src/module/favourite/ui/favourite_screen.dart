@@ -33,7 +33,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                 context,
                 MaterialPageRoute(
                   builder: (context) =>
-                      ImageScreen(snapshot.data[index]),
+                      Scaffold(body: ImageScreen(snapshot.data[index])),
                 ),
               );
 

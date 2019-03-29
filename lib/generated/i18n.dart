@@ -23,6 +23,8 @@ class S implements WidgetsLocalizations {
   String get main_bs_favourite => "Favourite";
   String get main_bs_gallery => "Gallery";
   String get main_bs_settings => "settings";
+  String get settings_downloaded => "Downloaded!";
+  String get share_message => "Meow!";
 }
 
 class $zh_HK extends S {
@@ -34,11 +36,15 @@ class $zh_HK extends S {
   @override
   String get app_name => "喵!";
   @override
+  String get settings_downloaded => "成功下載！";
+  @override
   String get main_bs_favourite => "最愛";
   @override
   String get main_bs_gallery => "圖庫";
   @override
   String get main_bs_settings => "設定";
+  @override
+  String get share_message => "喵!";
 }
 
 class $en extends S {
@@ -54,11 +60,15 @@ class $zh_CN extends S {
   @override
   String get app_name => "喵!";
   @override
+  String get settings_downloaded => "成功下载！";
+  @override
   String get main_bs_favourite => "最爱";
   @override
   String get main_bs_gallery => "图库";
   @override
   String get main_bs_settings => "设定";
+  @override
+  String get share_message => "喵!";
 }
 
 class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {

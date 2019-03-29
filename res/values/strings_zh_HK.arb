@@ -2,5 +2,7 @@
   "app_name": "喵!",
   "main_bs_gallery": "圖庫",
   "main_bs_favourite": "最愛",
-  "main_bs_settings": "設定"
+  "main_bs_settings": "設定",
+  "settings_downloaded": "成功下載！",
+  "share_message": "喵!"
 }

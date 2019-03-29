@@ -62,28 +62,6 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  Widget _buildIOS(int data) {
-
-    return CupertinoTabScaffold(
-      tabBar: CupertinoTabBar(
-        items: _createNavigationBarItem(),
-      ),
-      tabBuilder: (BuildContext context, int index) {
-        return CupertinoPageScaffold(
-          navigationBar: CupertinoNavigationBar(
-            middle: Text(
-              S.of(context).app_name,
-              style: TextStyle(
-                color: Colors.blue,
-              ),
-            ),
-          ),
-          child: _buildBody(index),
-        );
-      },
-    );
-  }
-
   List<BottomNavigationBarItem> _createNavigationBarItem() {
     return [
       BottomNavigationBarItem(
