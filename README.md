@@ -5,7 +5,8 @@ A Flutter sample project showing list of cat photos from TheCatAPI.
 ## Things included
 1. BLoC architecture
 2. Restful API integration
-3. SQLite database integration
+3. SQLite database implementation
+4. SharedPreferences implementation
 4. Mutli-Locale implementation
 
 ## Register account for TheCatApi
