@@ -1,6 +1,6 @@
 # Kitten
 A Flutter sample project showing list of cat photos from TheCatAPI.  
-![screenshot](https://github.com/kaiyan910/Kitten/blob/master/static/screenshot.png?raw=true | width=200)
+![screenshot](https://github.com/kaiyan910/Kitten/blob/master/static/screenshot.png?raw=true)
 
 ## Things included
 1. BLoC architecture
