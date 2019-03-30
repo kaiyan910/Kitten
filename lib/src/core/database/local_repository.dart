@@ -2,7 +2,10 @@ import 'package:kitten/src/core/database/database_provider.dart';
 import 'package:kitten/src/core/model/cat.dart';
 
 class LocalRepository {
-  final _databaseProvider = databaseProvider;
+
+  DatabaseProvider _databaseProvider;
+
+  LocalRepository(this._databaseProvider);
 
   Future<List<Cat>> fetchFavourites() async =>
       _databaseProvider.fetchFavourites();
@@ -19,5 +22,3 @@ class LocalRepository {
   Future<int> insertFavourite(Map<String, dynamic> map) async =>
       _databaseProvider.insertFavourite(map);
 }
-
-final localRepository = LocalRepository();

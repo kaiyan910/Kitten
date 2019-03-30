@@ -1,26 +1,33 @@
+import 'package:kitten/src/common/mixins/status_bar_handler.dart';
+import 'package:kitten/src/core/bloc/bloc.dart';
 import 'package:kitten/src/core/database/local_repository.dart';
 import 'package:kitten/src/core/model/cat.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:share/share.dart';
 import 'package:image_downloader/image_downloader.dart';
 
-class ImageBloc {
-  final _localRepository = localRepository;
-
+class ImageBloc extends BaseBloc with StatusBarHandler {
+  final LocalRepository _localRepository;
+  final Cat _cat;
   final _imageState = BehaviorSubject<ImageState>();
 
   Observable<ImageState> get imageState => _imageState.stream;
 
-  ImageBloc() {
-    _imageState.sink.add(ImageState.initial());
+  ImageBloc(this._localRepository, this._cat) {
+    _init(_cat.id);
+  }
+
+  @override
+  dispose() async {
+    await _imageState.drain();
+    _imageState.close();
   }
 
   download(String url) async {
+    // get last state
+    final ImageState currentState = await imageState.first;
+
     try {
-      print("[DEBUG] share=$url");
-      // get last state
-      final ImageState currentState = await imageState.first;
-      print("[DEBUG] $currentState");
       // ignore it, if it is downloading
       if (currentState.downloading) return;
       _imageState.sink.add(currentState.copyWith(downloading: true));
@@ -35,17 +42,18 @@ class ImageBloc {
       ));
     } on Exception catch (error) {
       print(error);
+
+      _imageState.sink.add(currentState.copyWith(
+          showSnackBar: true, downloading: false, hasError: true));
     }
   }
 
   share(String url, String message) async {
-    print("[DEBUG] share=$url");
     final ImageState currentState = await imageState.first;
-    print("[DEBUG] $currentState");
 
-    if (currentState.downloading) return;
-
-    if (currentState.imagePath.isNotEmpty) {
+    if (currentState.downloading) {
+      return;
+    } else if (currentState.imagePath.isNotEmpty) {
       Share.image(
         path: currentState.imagePath,
         text: message,
@@ -69,15 +77,6 @@ class ImageBloc {
     }
   }
 
-  checkFavourite(String id) async {
-    final ImageState currentState = await imageState.first;
-    final result = await _localRepository.hasFavourite(id);
-    _imageState.sink.add(currentState.copyWith(
-      favourite: result,
-      showSnackBar: false,
-    ));
-  }
-
   changeFavouriteStatus(Cat cat, bool favourite) async {
     final ImageState currentState = await imageState.first;
     if (favourite) {
@@ -87,48 +86,56 @@ class ImageBloc {
     }
     _imageState.sink.add(currentState.copyWith(
       favourite: favourite,
-      showSnackBar: favourite,
+      showSnackBar: false,
     ));
   }
 
-  dispose() async {
-    await _imageState.drain();
-    _imageState.close();
+  _init(String id) async {
+    final result = await _localRepository.hasFavourite(id);
+    _imageState.sink.add(ImageState(
+      favourite: result,
+    ));
   }
 }
 
 class ImageState {
   final bool favourite;
   final bool showSnackBar;
+  final bool hasError;
   final bool downloading;
   final String imagePath;
 
-  ImageState(
-      {this.favourite = false,
-      this.showSnackBar = false,
-      this.downloading = false,
-      this.imagePath = ""});
+  ImageState({
+    this.favourite = false,
+    this.showSnackBar = false,
+    this.hasError = false,
+    this.downloading = false,
+    this.imagePath = "",
+  });
 
   ImageState.initial()
       : favourite = false,
         showSnackBar = false,
+        hasError = false,
         downloading = false,
         imagePath = "";
 
   copyWith(
           {bool favourite,
           bool showSnackBar,
+          bool hasError,
           bool downloading,
           String imagePath}) =>
       ImageState(
         favourite: favourite ?? this.favourite,
         showSnackBar: showSnackBar ?? this.showSnackBar,
+        hasError: hasError ?? this.hasError,
         downloading: downloading ?? this.downloading,
         imagePath: imagePath ?? this.imagePath,
       );
 
   @override
   String toString() {
-    return 'ImageState{favourite: $favourite, showSnackBar: $showSnackBar, downloading: $downloading, imagePath: $imagePath}';
+    return 'ImageState{favourite: $favourite, showSnackBar: $showSnackBar, hasError: $hasError, downloading: $downloading, imagePath: $imagePath}';
   }
 }

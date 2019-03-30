@@ -2,7 +2,8 @@
   "app_name": "Meow!",
   "main_bs_gallery": "Gallery",
   "main_bs_favourite": "Favourite",
-  "main_bs_settings": "settings",
-  "settings_downloaded": "Downloaded!",
+  "main_bs_settings": "Settings",
+  "settings_downloaded": "Downloaded",
+  "settings_download_error": "Download Fail",
   "share_message": "Meow!"
 }

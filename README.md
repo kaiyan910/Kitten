@@ -1,16 +1,21 @@
-# kitten
+# Kitten
+A Flutter sample project showing list of cat photos from TheCatAPI.  
 
-An application for TheCatApi
+## Things included
+1. BLoC architecture
+2. Restful API integration
+3. SQLite database integration
+4. Mutli-Locale implementation
 
-## Getting Started
+## Register account for TheCatApi
+click [here](https://thecatapi.com/) to register account.
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## Create extra file
+create `constant.dart` at `/lib/src/core/` with content below:
 
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+```dart
+class Constant {
+  static const String API_KEY = "API_KEY_FROM_THE_CAT_API";
+}
+```

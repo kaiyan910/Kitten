@@ -27,5 +27,3 @@ class PreferencesRepository {
     return await sp.setString(KEY_LOCALE, locale);
   }
 }
-
-final preferencesRepository = PreferencesRepository();

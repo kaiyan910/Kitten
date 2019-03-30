@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
+typedef void OnGridTapListener(ImageProvider provider);
 
 class RippleGrid extends StatelessWidget {
-  final Function onTap;
+  final OnGridTapListener onTap;
   final double size;
   final String url;
 
@@ -9,13 +12,16 @@ class RippleGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    ImageProvider imageProvider = CachedNetworkImageProvider(url);
+
     return Hero(
       tag: url,
       child: Stack(
         children: <Widget>[
-          FadeInImage.assetNetwork(
-            placeholder: 'assets/images/placeholder.png',
-            image: url,
+          FadeInImage(
+            placeholder: AssetImage("assets/images/placeholder.png"),
+            image: imageProvider,
             fit: BoxFit.cover,
             height: size,
             width: size,
@@ -24,7 +30,7 @@ class RippleGrid extends StatelessWidget {
               color: Colors.transparent,
               child: new InkWell(
                 splashColor: Colors.white30,
-                onTap: onTap,
+                onTap: () => onTap(imageProvider),
               )),
         ],
       ),

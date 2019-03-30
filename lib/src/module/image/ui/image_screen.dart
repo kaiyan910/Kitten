@@ -1,48 +1,60 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
 import 'package:kitten/generated/i18n.dart';
 import 'package:kitten/src/common/widget/platform_loading.dart';
+import 'package:kitten/src/core/database/local_repository.dart';
 import 'package:kitten/src/core/model/cat.dart';
 import 'package:kitten/src/module/image/bloc/image_bloc.dart';
+import 'package:kiwi/kiwi.dart' as kiwi;
 import 'package:photo_view/photo_view.dart';
 
 class ImageScreen extends StatefulWidget {
   final Cat cat;
+  final ImageProvider imageProvider;
 
-  ImageScreen(this.cat, {Key key}) : super(key: key);
+  ImageScreen(this.cat, this.imageProvider, {Key key}) : super(key: key);
 
   @override
-  _ImageScreenState createState() => _ImageScreenState();
+  _ImageScreenState createState() => _ImageScreenState(
+      ImageBloc(kiwi.Container().resolve<LocalRepository>(), cat));
 }
 
 class _ImageScreenState extends State<ImageScreen> {
-  final _bloc = ImageBloc();
+  final ImageBloc _bloc;
+
+  _ImageScreenState(this._bloc);
 
   @override
   Widget build(BuildContext context) {
+    _bloc.changeStatusBarStyle(Colors.black, StatusBarStyle.LIGHT_CONTENT);
     return StreamBuilder<ImageState>(
       stream: _bloc.imageState,
       initialData: ImageState.initial(),
       builder: (BuildContext context, AsyncSnapshot<ImageState> snapshot) {
+        print("[DEBUG] _ImageScreen ${snapshot.data}");
+
         if (snapshot.data.showSnackBar) {
-          _showSnackBar(context);
+          _showSnackBar(context, snapshot.data.hasError);
         }
 
-        return Stack(
-          children: <Widget>[
-            _buildPhotoView(snapshot.data.downloading),
-            _buildAppBar(),
-            _buildBottomFavourite(snapshot.data.favourite),
-          ],
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.black,
+          ),
+          child: SafeArea(
+            child: Stack(
+              children: <Widget>[
+                _buildPhotoView(context, snapshot.data.downloading),
+                _buildAppBar(context, _bloc),
+                _buildBottomFavourite(_bloc, snapshot.data.favourite),
+              ],
+            ),
+          ),
         );
       },
     );
-  }
-
-  @override
-  void initState() {
-    _bloc.checkFavourite(widget.cat.id);
-    super.initState();
   }
 
   @override
@@ -51,12 +63,14 @@ class _ImageScreenState extends State<ImageScreen> {
     super.dispose();
   }
 
-  Widget _buildPhotoView(bool showLoading) => Stack(
+  Widget _buildPhotoView(BuildContext context, bool showLoading) => Stack(
+        alignment: Alignment.center,
         children: <Widget>[
           PhotoView(
-            imageProvider: NetworkImage(widget.cat.url),
-            initialScale: 1.0,
-            minScale: 0.5,
+            //CachedNetworkImageProvider(_cat.url),
+            minScale: PhotoViewComputedScale.contained,
+            imageProvider: widget.imageProvider,
+            maxScale: 2.0,
             heroTag: widget.cat.url,
           ),
           Center(
@@ -67,7 +81,7 @@ class _ImageScreenState extends State<ImageScreen> {
         ],
       );
 
-  Widget _buildAppBar() => Positioned(
+  Widget _buildAppBar(BuildContext context, ImageBloc bloc) => Positioned(
         top: 0.0,
         left: 0.0,
         right: 0.0,
@@ -85,17 +99,18 @@ class _ImageScreenState extends State<ImageScreen> {
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.share),
-              onPressed: () => _bloc.share(widget.cat.url, S.of(context).share_message),
+              onPressed: () =>
+                  bloc.share(widget.cat.url, S.of(context).share_message),
             ),
             IconButton(
               icon: Icon(Icons.file_download),
-              onPressed: () => _bloc.download(widget.cat.url),
+              onPressed: () => bloc.download(widget.cat.url),
             ),
           ],
         ),
       );
 
-  Widget _buildBottomFavourite(bool favourite) => Positioned(
+  Widget _buildBottomFavourite(ImageBloc bloc, bool favourite) => Positioned(
         bottom: 0.0,
         left: 0.0,
         right: 0.0,
@@ -106,19 +121,22 @@ class _ImageScreenState extends State<ImageScreen> {
               (favourite) ? Icons.favorite : Icons.favorite_border,
               color: (favourite) ? Colors.red : Colors.white,
             ),
-            onPressed: () =>
-                _bloc.changeFavouriteStatus(widget.cat, !favourite),
+            onPressed: () => bloc.changeFavouriteStatus(widget.cat, !favourite),
           ),
         ),
       );
 
-  _showSnackBar(BuildContext context) {
+  void _showSnackBar(BuildContext context, bool hasError) {
     Future.delayed(Duration(milliseconds: 100)).then((_) {
       final snackBar = SnackBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: (hasError) ? Colors.red : Colors.blue,
+        duration: Duration(milliseconds: 500),
         content: Text(
-          S.of(context).settings_downloaded,
+          (hasError)
+              ? S.of(context).settings_download_error
+              : S.of(context).settings_downloaded,
           style: TextStyle(color: Colors.white),
+          textAlign: TextAlign.center,
         ),
       );
       Scaffold.of(context).showSnackBar(snackBar);

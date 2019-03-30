@@ -6,14 +6,13 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 
 class DatabaseProvider {
+
   static const String TABLE_FAVOURITES = "favourites";
 
-  static Database _database;
+  Database _database;
 
   Future<Database> get database async {
-    if (_database != null) return _database;
-
-    _database = await _init();
+    if (_database == null) _database = await _init();
     return _database;
   }
 
@@ -74,5 +73,3 @@ class DatabaseProvider {
     );
   }
 }
-
-final databaseProvider = DatabaseProvider();

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:kitten/generated/i18n.dart';
 import 'package:kitten/src/common/widget/platform_indicator.dart';
+import 'package:kitten/src/core/bloc/bloc.dart';
 
 import 'package:kitten/src/module/favourite/ui/favourite_screen.dart';
 import 'package:kitten/src/module/main/bloc/main_bloc.dart';
@@ -20,15 +21,13 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('[DEBUG] build MainScreen');
-
     return StreamBuilder<int>(
       stream: _bloc.selectedIndex,
       initialData: 0,
       builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
         return PlatformIndicator(
-          android: _buildAndroid(snapshot.data),
-          ios: _buildAndroid(snapshot.data),
+          android: _buildAndroid(context, _bloc, snapshot.data),
+          ios: _buildAndroid(context, _bloc, snapshot.data),
         );
       },
     );
@@ -40,7 +39,7 @@ class _MainScreenState extends State<MainScreen> {
     super.dispose();
   }
 
-  Widget _buildAndroid(int data) {
+  Widget _buildAndroid(BuildContext context, MainBloc bloc, int data) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -55,32 +54,26 @@ class _MainScreenState extends State<MainScreen> {
       ),
       body: _buildBody(data),
       bottomNavigationBar: BottomNavigationBar(
-        items: _createNavigationBarItem(),
+        items: _createNavigationBarItem(context),
         currentIndex: data,
-        onTap: (index) => _bloc.updateSelectedIndex(index),
+        onTap: (index) => bloc.updateSelectedIndex(index),
       ),
     );
   }
 
-  List<BottomNavigationBarItem> _createNavigationBarItem() {
+  List<BottomNavigationBarItem> _createNavigationBarItem(BuildContext context) {
     return [
       BottomNavigationBarItem(
         icon: Icon(Icons.add_a_photo),
-        title: Text(S
-            .of(context)
-            .main_bs_gallery),
+        title: Text(S.of(context).main_bs_gallery),
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.favorite),
-        title: Text(S
-            .of(context)
-            .main_bs_favourite),
+        title: Text(S.of(context).main_bs_favourite),
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.settings),
-        title: Text(S
-            .of(context)
-            .main_bs_settings),
+        title: Text(S.of(context).main_bs_settings),
       ),
     ];
   }

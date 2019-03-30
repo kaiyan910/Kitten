@@ -1,12 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
-import 'package:kitten/src/common/widget/platform_indicator.dart';
 import 'package:kitten/src/common/widget/platform_loading.dart';
+import 'package:kitten/src/core/bloc/bloc.dart';
+import 'package:kitten/src/core/model/cat.dart';
+import 'package:kitten/src/core/network/remote_repository.dart';
 
 import 'package:kitten/src/module/image/ui/image_screen.dart';
 import 'package:kitten/src/module/search/bloc/search_bloc.dart';
 import 'package:kitten/src/common/widget/ripple_grid.dart';
+
+import 'package:kiwi/kiwi.dart' as kiwi;
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -14,46 +18,25 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  final _bloc = SearchBloc();
+  final SearchBloc _bloc =
+      SearchBloc(kiwi.Container().resolve<RemoteRepository>());
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size.width / 3;
-    print('[DEBUG] build SearchScreen');
 
     return RefreshIndicator(
-
       child: StreamBuilder<SearchScreenState>(
         stream: _bloc.searchResult,
         initialData: SearchScreenState.initial(),
         builder:
             (BuildContext context, AsyncSnapshot<SearchScreenState> snapshot) {
-
-          if (!snapshot.data.init) {
-            return PlatformLoading();
-          }
-
-          return GridView.count(
-            crossAxisCount: 3,
-            physics: AlwaysScrollableScrollPhysics(),
-            children: List.generate(snapshot.data.results.length, (index) {
-              return RippleGrid(() async {
-                _bloc.changeStatusBarStyle(
-                    Colors.black, StatusBarStyle.LIGHT_CONTENT);
-
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Scaffold(body: ImageScreen(snapshot.data.results[index])),
-                  ),
-                );
-
-                _bloc.changeStatusBarStyle(
-                    Colors.white, StatusBarStyle.DARK_CONTENT);
-              }, size, snapshot.data.results[index].url);
-            }),
-          );
-        },
+              if (!snapshot.data.init) {
+                return PlatformLoading();
+              } else {
+                return createGridView(size, snapshot.data.results);
+              }
+            }
       ),
       displacement: 50,
       onRefresh: () => _bloc.search(),
@@ -61,16 +44,28 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   @override
-  void initState() {
-    print('[DEBUG] initState()');
-    _bloc.search();
-    _bloc.changeStatusBarStyle(Colors.white, StatusBarStyle.DARK_CONTENT);
-    super.initState();
-  }
-
-  @override
   void dispose() {
     _bloc.dispose();
     super.dispose();
   }
+
+  Widget createGridView(double size, List<Cat> cats) => GridView.count(
+      crossAxisCount: 3,
+      physics: AlwaysScrollableScrollPhysics(),
+      children: List.generate(cats.length, (index) {
+        return RippleGrid((ImageProvider imageProvider) async {
+
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Scaffold(
+                  body: ImageScreen(cats[index], imageProvider)),
+            ),
+          );
+
+          _bloc.changeStatusBarStyle(
+              Colors.white, StatusBarStyle.DARK_CONTENT);
+        }, size, cats[index].url);
+      }),
+    );
 }
